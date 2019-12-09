@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sean.dao.MyfilePropertyMapper" >
+  <resultMap id="BaseResultMap" type="com.sean.bean.MyfileProperty" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="fid" property="fid" jdbcType="VARCHAR" />
+    <result column="property" property="property" jdbcType="VARCHAR" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, fid, property, label
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from my_fileproperty
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from my_fileproperty
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sean.bean.MyfileProperty" >
+    insert into my_fileproperty (id, fid, property,
+      label)
+    values (#{id,jdbcType=VARCHAR}, #{fid,jdbcType=VARCHAR}, #{property,jdbcType=VARCHAR},
+      #{label,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sean.bean.MyfileProperty" >
+    insert into my_fileproperty
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fid != null" >
+        fid,
+      </if>
+      <if test="property != null" >
+        property,
+      </if>
+      <if test="label != null" >
+        label,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="fid != null" >
+        #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null" >
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null" >
+        #{label,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sean.bean.MyfileProperty" >
+    update my_fileproperty
+    <set >
+      <if test="fid != null" >
+        fid = #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null" >
+        property = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null" >
+        label = #{label,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sean.bean.MyfileProperty" >
+    update my_fileproperty
+    set fid = #{fid,jdbcType=VARCHAR},
+      property = #{property,jdbcType=VARCHAR},
+      label = #{label,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectLabelsByFid" parameterType="java.lang.String" resultType="java.lang.String">
+    select label from my_fileproperty
+    where fid = #{fid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByFid" parameterType="java.lang.String" resultType="com.sean.bean.MyfileProperty" >
+    select * from my_fileproperty
+    where fid = #{fid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectIdByFid" parameterType="java.lang.String" resultType="java.lang.String">
+    select id from my_fileproperty
+    where fid = #{fid,jdbcType=VARCHAR} limit 1
+  </select>
+</mapper>

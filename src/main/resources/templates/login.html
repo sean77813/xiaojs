@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+
+<!--    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>-->
+<!--    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <!--<link href="/js/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script src="/js/jquery/jquery.min.js"  type="text/javascript"></script>
+    <script src="/js/bootstrap/js/bootstrap.min.js"   type="text/javascript"></script>-->
+    <script src="/js/common.js"></script>
+
+    <style>
+        /*body{*/
+
+        /*    background:url("/images/5.jpg") no-repeat;*/
+        /*    background-size: 100%;*/
+        /*}*/
+
+        body{
+            background: url("/images/2.jpg");
+            animation-name:myfirst;
+            animation-duration:12s;
+            animation-delay:2s;
+            animation-iteration-count:infinite;
+            animation-play-state:running;
+        }
+          /*@keyframes myfirst
+          {
+           0%   {background:url("/images/1.jpg");}
+           34%  {background:url("/images/2.jpg");}
+           67%  {background:url("/images/3.jpg");}
+           100% {background:url("/images/1.jpg");}
+          }*/
+        .form{background: rgba(255,255,255,0.2);width:400px;margin:120px auto;}
+        .fa{display: inline-block;top: 27px;left: 6px;position: relative;color: #ccc;}
+        input[type="text"],input[type="password"]{padding-left:26px;}
+        .checkbox{padding-left:21px;}
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <div class="form row">
+        <form id="login_form" method="get" action="/user/loginUser">
+        <div class="form-horizontal col-md-offset-3">
+            <h3 class="form-title">LOGIN</h3>
+            <div class="col-md-9">
+                <div class="form-group">
+                    <i class="fa fa-user fa-lg"></i>
+                    <input class="form-control required" type="text" placeholder="username" id="username" name="username" autofocus="autofocus" maxlength="20"/>
+                </div>
+                <div class="form-group">
+                    <i class="fa fa-lock fa-lg"></i>
+                    <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="18"/>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox">
+                        <input type="checkbox" name="remember" value="1"/>记住密码
+                    </label>
+                </div>
+                <div class="form-group col-md-offset-9">
+                    <button type="button" class="btn btn-success" id="btn_register" onclick="doRegister()">注册</button>
+                    <button type="submit" class="btn btn-success pull-right" name="submit">登录</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    //跳转注册页面
+    function doRegister(){
+        window.location.href="/user/verification";
+    }
+</script>
+</html>

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>主页</title>
+    <style>
+        .panel-detail{
+            position:fixed;
+            top:130px;
+            right:0px;
+            border: #999999 2px;
+            border-radius:5px 0 0 5px;
+            border:3px solid #F5F5F5;
+            background-color: #ffffff;
+        }
+    </style>
+    <script src="/js/common.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">SEAN文件系统</a>
+        </div>
+        <div>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn btn-success">搜索</button>
+            </form>
+            <button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#myModal">
+                上传文件
+            </button>
+            <div  style="float: right;padding: 16px 20px ">
+                <span th:text="${username}"></span>
+                <a href="/user/logout" class="btn btn-default">安全退出</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<div style="padding: 0 10px;margin: 0 10px;">
+    <!-- 个人文件 详细面板 -->
+    <div class="panel-detail" id="panel-detail" style="width: 400px;height: 80%;z-index:99;">
+        <div style="padding:5px;">
+            <button type="button" class="btn btn-primary " onclick="closeDetail('mypic')">关闭</button>
+            <button type="button" class="btn btn-primary pull-right"  data-toggle="modal" data-target="#addLabelModal">添加标签</button>
+        </div>
+        <div style="height:10px;visibility:hidden;"></div>
+        <div>
+            <table id="fileinfo_private">
+            </table>
+        </div>
+        <!--属性-->
+        <div>
+            <table id="propsList">
+            </table>
+        </div>
+        <div style="height:25px;visibility:hidden;"></div>
+
+        <!--标签-->
+        <div id="labelList_private">
+        </div>
+        <div style="height:25px;visibility:hidden;"></div>
+
+        <!--日志-->
+        <div id="private-logs_div" class="pre-scrollable" style=" height:250px; overflow:auto">
+        </div>
+    </div>
+    <!-- 分享文件 详细面板 -->
+    <div class="panel-detail" id="share-detail" style="width: 400px;height: 80%;z-index:99;">
+        <div style="padding:5px;">
+            <button type="button" class="btn btn-primary " onclick="closeDetail('share')">关闭</button>
+        </div>
+        <div style="height:10px;visibility:hidden;"></div>
+
+        <div>
+            <table class="table">
+                <tr>
+                    <td>上传人:</td>
+                    <td id="td_author"></td>
+                </tr>
+                <tr>
+                    <td>分享时间:</td>
+                    <td id="td_releasetime"></td>
+                </tr>
+            </table>
+        </div>
+        <div style="height:25px;visibility:hidden;"></div>
+
+        <div id="labelList_public">
+        </div>
+        <div style="height:25px;visibility:hidden;"></div>
+
+        <!--日志-->
+        <div id="public-logs_div" class="pre-scrollable" style=" height:250px; overflow:auto">
+        </div>
+        <div style="height:25px;visibility:hidden;"></div>
+
+        <!-- 评论 -->
+        <div id="public-comment_div" class="pre-scrollable" style=" height:250px; overflow:auto">
+            <table class="table table-condensed">
+                <caption>评论</caption>
+                <tbody>
+                <tr>
+                    <td>2019-12-06 18:20:02</td>
+                    <td>真好！！！</td>
+                    <td>admin</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="padding: 5px 5px 5px;">
+            <form class="bs-example bs-example-form" role="form">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control">
+                            <span class="input-group-btn">
+						<button class="btn btn-primary" type="button">
+							发送
+						</button>
+					</span>
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+            </form>
+        </div>
+    </div>
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active">
+            <a href="#home" data-toggle="tab">我的文件
+            </a>
+        </li>
+        <li>
+            <a href="#shareSpace" data-toggle="tab">分享空间
+            </a>
+        </li>
+    </ul>
+
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="home">
+            <div style="height:10px;visibility:hidden;"></div>
+            <!--我的照片-->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">我的照片</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row" id="img_show"></div>
+                </div>
+            </div>
+
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">我的文件</h3>
+                </div>
+                <div class="panel-body">
+                    开发中....
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane fade" id="shareSpace">
+            <div style="height:10px;visibility:hidden;"></div>
+            <div class="panel panel-info" onload="initPPic()">
+                <div class="panel-heading">
+                    <h3 class="panel-title">分享图片</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row" id="ppic_show"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<div>
+</div>
+    <!-- 上传 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 800px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel" style="width: 200px;display: inline-block;">
+                        上传文件
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="margin-top: 2px;">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <iframe id="uploadFrame" name="uploadFrame" src="/html/uploadfile.html" width="100%" height="460px" frameborder="0">
+                    </iframe>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <!--删除 模态框-->
+    <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 300px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                    </button>
+                    <h4 class="modal-title" id="delModalLabel">
+                        删除文件
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    确定删除吗?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="del_btn">
+                        确认删除
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        取消
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!--详情 模态框（Modal） -->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                    <h4 class="modal-title" id="detailModalModalLabel">
+                        文件详情
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <button class="btn btn-info">添加属性</button>
+                    <form>
+                        <input type="text" name=""/>
+                        <input type="text" name=""/>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!--分享 模态框-->
+    <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                    </button>
+                    <h4 class="modal-title" id="shareModalLabel">
+                        分享图片
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    将图片分享给所有人
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="share_btn">
+                        确认
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        关闭
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- 显示大图模态框 -->
+    <div class="modal fade text-center" id="showImgModal">
+        <div class="modal-dialog modal-lg" style="display: inline-block; width: auto;">
+            <div class="modal-content">
+                <img id="showImage" src="">
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加标签模态框（Modal） -->
+    <div class="modal fade" id="addLabelModal" tabindex="-1" role="dialog" aria-labelledby="addLabelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h5 class="modal-title" id="addLabelModalLabel">
+                        添加标签
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="input_labels">标签内容</label>
+                            <input type="text" class="form-control" id="input_labels" placeholder="添加多个标签用‘,’分隔">
+                            <input type="hidden" name="addlabel_fileid" />
+                        </div>
+                        <label for="select_level">级别</label>
+                        <select class="form-control" id="select_level">
+                            <option >1</option>
+                            <option>2</option>
+                            <option selected>3</option>
+                            <option>4</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="addLabel()">
+                        确认
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+<form action="/download" method="post" id="download_from">
+    <input type="hidden"  name="filePath" id="download_filepath"/>
+</form>
+    <script>
+        $(function () {
+            //初始化个人图片
+            initMyImg();
+            //初始化分享图片
+            initPPic();
+
+            $('#delModal').modal('hide');
+            //确认删除按钮
+            $("#del_btn").on('click',function(){
+                delfile(path);
+            })
+        });
+        //点击图片下方 删除按钮
+        $(document).on("click", "#del_btn_1", function(){
+            $('#delModal').modal('show');
+            path = $(this).next().val();
+        });
+
+        /** 显示文件 **/
+        function initMyImg(){
+            //清空图片
+            $("#img_show").empty();
+            $.post("/getMyfiles",{"filetype":"img"},function(data){
+                console.log(data);
+                var files = data.files;
+                var img  = null;
+                var l = files.length;
+                for(var i=0;i<l;i++){
+                    var img_path = null!=files[i].thumbimage ? files[i].thumbimage:files[i].path;
+                    var $div = $("<div class='col-sm-6 col-md-2' style='width: 20%;height: 270px;'></div>");
+                    var $a = $("<a href='#' onclick='showGigImg(\""+files[i].path+"\")' class='thumbnail' ></a>");
+                    var $btn_dowload = $("<a href='#' class='btn btn-link' role='button' id='' onclick='downloadfile(\""+files[i].path+"\")'>下载</a>");
+                    var $btn_del = $("<a href='#' class='btn btn-link' role='button' data-toggle='modal' id='del_btn_1'>删除</a>");
+                    var $input = $("<input type='hidden' name='filepath' value='"+files[i].path+"'/>");
+                    var $btn_share = $("<a href='' class='btn btn-link' role='button' data-toggle='modal' id='del_share' onclick='openShareModal(\""+files[i].id+"\")'>分享</a>");
+                    var $btn_detail = $("<a href='' class='btn btn-link' role='button' data-toggle='modal' onclick='openDetail(\""+files[i].id+"\",\"mypic\")'>更多</a>");
+                    var $img = $("<img src='"+img_path+"' alt='' />");
+                    $a.append($img);
+                    $div.append($a);
+                    $div.append($btn_dowload);
+                    $div.append($btn_del);
+                    $div.append($input);
+                    $div.append($btn_share);
+                    $div.append($btn_detail);
+                    $("#img_show").append($div);
+                }
+            }, 'json');
+        }
+        /**显示分享的图片**/
+        function initPPic(){
+            //清空图片
+            $("#ppic_show").empty();
+            $.post("/getPPic",{},function(data){
+                console.log(data);
+                var files = data.files;
+                var img  = null;
+                var l = files.length;
+                for(var i=0;i<l;i++){
+                    var img_path = null!=files[i].thumbimage ? files[i].thumbimage:files[i].path;
+                    var $div = $("<div class='col-sm-6 col-md-2' style='width: 20%;height: 270px;'></div>");
+                    var $a = $("<a href='#' onclick='showGigImg(\""+files[i].path+"\")' class='thumbnail'></a>");
+                    var $btn_dowload = $("<a href='#' class='btn btn-link' role='button' id='' onclick='downloadfile(\""+files[i].path+"\")'>下载</a>");
+                    var $btn_detail = $("<a href='#' class='btn btn-link' role='button' data-toggle='modal' onclick='openDetail(\""+files[i].id+"\",\"share\")'>更多</a>");
+                    var $img = $("<img src='"+img_path+"' alt='' />");
+                    $a.append($img);
+                    $div.append($a);
+                    $div.append($btn_dowload);
+                    $div.append($btn_detail);
+                    $("#ppic_show").append($div);
+                }
+            }, 'json');
+        }
+
+        var path = null;
+        /** 删除图片 **/
+        var delfile = function(path){
+            console.log(path);
+            $.ajax({
+                url:"/deleteFile",//后台的接口地址
+                type:"post",//post请求方式
+                async: false,
+                data: {"fileName":"fileName","filePath":path},//提交的数
+                success:function (data) {
+                    alert(data.msg);
+                    $('#delModal').modal('hide')
+                    location.reload();
+                },error:function () {
+                    alert("操作失败~");
+                    $('#delModal').modal('hide')
+                }
+            })
+        }
+        /** 下载图片 **/
+        var downloadfile = function(path){
+            $("#download_filepath").val(path);
+            $("#download_from").submit();
+        }
+
+        /*****  显示大图 *****/
+        function showGigImg(path){
+            $("#showImage").attr("src", path);
+            $('#showImgModal').modal('show');
+        }
+
+    /***** 文件详细页 *******/
+    $(function(){
+        $("#panel-detail").hide();
+        $("#share-detail").hide();
+
+        //切换选项卡时隐藏详细面板
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $("#panel-detail").hide();
+            $("#share-detail").hide();
+        });
+    })
+        //关闭详细面板
+        function closeDetail(type){
+            if("mypic"==type){
+                $("#panel-detail").hide();
+            }else if("share"==type){
+                $("#share-detail").hide();
+            }
+        }
+     var getPropJson = function(){
+        var json;
+        $.ajax({
+            url:"/getExtPropJson",//后台的接口地址
+            type:"post",//post请求方式
+            async: false,
+            data: {},//提交的数
+            success:function (data) {
+                console.log(data);
+                json = data;
+            },error:function (e) {
+                console.log(e.toString());
+            }
+        })
+         return json;
+    }
+     var getfileProp = function(fileid){
+        var json;
+        $.ajax({
+            url:"/getExtPropJson",//后台的接口地址
+            type:"post",//post请求方式
+            async: false,
+            data: {},//提交的数
+            success:function (data) {
+                console.log(data);
+                json = data;
+            },error:function (e) {
+                console.log(e.toString());
+            }
+        })
+         return json;
+    }
+
+        //打开详细
+        function openDetail(fid,type){
+            selecdfid = fid;
+            if("mypic"==type){
+                initfileLabel(fid,type);
+                initFileLogs(fid,2,"false","private-logs_div"); //下载日志
+                $("#panel-detail").show();
+                //加载 标签fid
+            }else if("share"==type){
+                initfileLabel(fid,type);
+                initFileLogs(fid,2,"false","public-logs_div"); //下载日志
+                $("#share-detail").show();
+                $.ajax({
+                    url:"/getPPicPropByFid",//后台的接口地址
+                    type:"post",//post请求方式
+                    async: false,
+                    data: {"fileid":fid},//提交的数
+                    success:function (data) {
+                        var ppic = data.ppic;
+                        console.log(data);
+                        for(var i in ppic){
+                            $("#td_"+i).html(ppic[i]);
+                        }
+                        $("#td_releasetime").html(resolvingDate(ppic.releasetime));
+                    },error:function (e) {
+                        console.log(e.toString());
+                    }
+                })
+            }
+
+
+            // var fileProps = getPropJson();
+            // var myProps = getfileProp(fid);
+            // /** 构建表格数据 **/
+            // if(myProps!=null){
+            //     var $tr = $("<tr></tr>");
+            //         for(var i=0;i<myProps.length;i++ ){
+            //             var $td_key = $("<td>"+myProps[i].key+"</td>");
+            //             var $td_val = $("<td>"+myProps[i].val+"</td>");
+            //         }
+            // }
+            // $("#propsList")
+
+        }
+
+        /******** 图片分享 *********/
+        var selecdfid; //选中的文件id
+        function openShareModal(fid){
+            if(""== fid || null == fid){
+                alert("异常！");
+                return;
+            }
+            $('#shareModal').modal('show');
+            selecdfid = fid;
+        }
+        $(document).on("click", "#share_btn", function(){
+            if(""== selecdfid || null == selecdfid){
+                alert("异常！");
+                return;
+            }
+            sharePIC(selecdfid);
+        });
+        //分享图片方法
+        function sharePIC(fid){
+            $.ajax({
+                url:"/sharepic",//后台的接口地址
+                type:"post",//post请求方式
+                async: false,
+                data: {"fileid":fid},//提交的数据
+                success:function (resultCode) {
+                    if("200"==resultCode){
+                        alert("分享成功！");
+                    }else if("400"==resultCode){
+                        alert("参数异常！");
+                    }else if("401"==resultCode){
+                        alert("该图片已分享！");
+                    }else if("404"==resultCode){
+                        alert("图片源异常！");
+                    }else if("500"==resultCode){
+                        alert("分享异常！");
+                    }
+                    $('#shareModal').modal('hide');
+                    initPPic();
+                },error:function (e) {
+                    console.log(e.toString());
+                }
+            })
+        }
+
+        /******* 图片标签 ********/
+        //加载图片标签
+        function initfileLabel(fid,type){
+            var labelList = null;
+            if("mypic"==type){
+                labelList = $("#labelList_private");
+            }else if("share"==type){
+                labelList = $("#labelList_public");
+            }
+            if(null==labelList)
+                return;
+            labelList.empty();
+            $.ajax({
+                url:"/getPPicLabelByFid",//后台的接口地址
+                type:"post",//post请求方式
+                async: false,
+                data: {"fileid":fid},//提交的数据
+                success:function (data) {
+                    var labels_str = data.labels;
+                    if(null !=labels_str && ""!=labels_str){
+                    var labels = JSON.parse(labels_str);
+                    for(var i in labels){
+                        var $div_balel;
+                        if("1"==labels[i]){
+                            $div_balel = $('<span class="label label-default">'+i+'</span>');
+                        }else if("2"==labels[i]){
+                            $div_balel = $('<span class="label label-success">'+i+'</span>');
+                        }else if("3"==labels[i]){
+                            $div_balel = $('<span class="label label-info">'+i+'</span>');
+                        }else{
+                            $div_balel = $('<span class="label label-warning">'+i+'</span>');
+                        }
+                        labelList.append('&nbsp;');
+                        labelList.append($div_balel);
+                    }
+                    }
+                },error:function (e) {
+                    console.log(e.toString());
+                }
+            })
+        }
+        //添加标签
+        function addLabel(){
+            var fid = selecdfid;
+            var labels = $("#input_labels").val();
+            var level = $("#select_level").val();
+            if( ""==labels || null==labels){
+                alert("请输入标签内容");
+                return;
+            }
+            if(""==fid || null==fid){
+                alert("参数异常");
+                return;
+            }
+            $.ajax({
+                url:"/addlabel",//后台的接口地址
+                type:"post",//post请求方式
+                async: false,
+                data: {"fileid":fid,"labels":labels,"level":level},//提交的数据
+                success:function (resultCode) {
+                    if("200"==resultCode){
+                        alert("添加成功！");
+                        $("#input_labels").val("");
+                        $("#select_level").val("3");
+                        $("#addLabelModal").modal("hide");
+                        initfileLabel(fid,"mypic");
+                    }else if("400"==resultCode){
+                        alert("参数异常！");
+                    }else if("401"==resultCode){
+                        alert("该图片已分享！");
+                    }else if("404"==resultCode){
+                        alert("图片源异常！");
+                    }else if("500"==resultCode){
+                        alert("添加异常！");
+                    }
+                },error:function (e) {
+                    console.log(e.toString());
+                }
+            })
+        }
+    </script>
+    <script>
+        /**
+         * 获取文件操作日志
+         */
+        function initFileLogs(fid, type,isLike,div_Id){
+            var $div = $("#"+div_Id);
+            if($div == null){
+                console.log("未找到日志容器:"+div_Id);
+                return;
+            }
+            $div.empty();
+            $.post("/filelog/getlogs",{"fileid":fid,"type":type,"isLike":isLike},function(data){
+                console.log(data);
+                var logs = data.logs;
+                var $Tab = $("<table class='table table-condensed'></table>");
+                var $thrad = $("<thead><tr><th>日期</th><th>操作人员</th><th>操作</th></tr></thead>");
+                var $tbody = $("<tbody></tbody>");
+                for(var i=0; i<logs.length; i++){
+                    var type;
+                    if(logs[i].type==1){
+                        type = "上传";
+                    }else if(logs[i].type==2){
+                        type = "下载";
+                    }
+                    var $tr = $("<tr><td>"+resolvingDate(logs[i].time)+"</td><td>"+logs[i].operator+"</td><td>"+type+"</td></tr>");
+                    $tbody.append($tr);
+                }
+                $Tab.append($thrad);
+                $Tab.append($tbody);
+                $div.append($Tab);
+            }, 'json');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sean.dao.PublicPicMapper" >
+  <resultMap id="BaseResultMap" type="com.sean.bean.PublicPic" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="fid" property="fid" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="releasetime" property="releasetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, fid, author, releasetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_publicpic
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_publicpic
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sean.bean.PublicPic" >
+    insert into t_publicpic (id, fid, author, 
+      releasetime)
+    values (#{id,jdbcType=VARCHAR}, #{fid,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{releasetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sean.bean.PublicPic" >
+    insert into t_publicpic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fid != null" >
+        fid,
+      </if>
+      <if test="author != null" >
+        author,
+      </if>
+      <if test="releasetime != null" >
+        releasetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="fid != null" >
+        #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="releasetime != null" >
+        #{releasetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sean.bean.PublicPic" >
+    update t_publicpic
+    <set >
+      <if test="fid != null" >
+        fid = #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="releasetime != null" >
+        releasetime = #{releasetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sean.bean.PublicPic" >
+    update t_publicpic
+    set fid = #{fid,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      releasetime = #{releasetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="isExistPicByFid" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select count(id) from t_publicpic
+     where fid = #{fid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectFidAll" resultType="java.lang.String">
+    select fid from t_publicpic
+    order by releasetime
+  </select>
+  <select id="selectPpicByFid" resultType="com.sean.bean.PublicPic"  parameterType="java.lang.String">
+    select * from t_publicpic
+    where fid = #{fid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectIdByFid" resultType="java.lang.String"  parameterType="java.lang.String">
+    select id from t_publicpic
+    where fid = #{fid,jdbcType=VARCHAR} limit 1
+  </select>
+</mapper>

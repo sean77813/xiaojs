@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>login</title>
+ <script src="/js/common.js"></script>
+<!-- <link href="/js/bootstrap/css/bootstrapValidator.min.css" rel="stylesheet">-->
+<!-- <script src="/js/bootstrap/js/bootstrapValidator.js"></script>-->
+
+ <style>
+  body{
+   background: url("/images/3.jpg");
+   animation-name:myfirst;
+   animation-duration:12s;
+   animation-delay:2s;
+   animation-iteration-count:infinite;
+   animation-play-state:running;
+  }
+  /*@keyframes myfirst
+  {
+   0%   {background:url("/images/1.jpg");}
+   34%  {background:url("/images/2.jpg");}
+   67%  {background:url("/images/3.jpg");}
+   100% {background:url("/images/1.jpg");}
+  }*/
+  .form{background: rgba(255,255,255,0.7);width:400px;margin:120px auto;}
+  .fa{display: inline-block;top: 27px;left: 6px;position: relative;color: #ccc;}
+  input[type="text"],input[type="password"]{padding-left:26px;}
+  .checkbox{padding-left:21px;}
+ </style>
+
+</head>
+<body>
+<div class="container">
+ <div class="form row">
+  <form id="register_form" method="post" action="/user/register">
+   <div class="form-horizontal col-md-offset-3">
+    <h3 class="form-title">注册</h3>
+    <div class="col-md-9">
+     <div class="form-group">
+      <span>用户名</span>
+      <i class="fa fa-user fa-lg"></i>
+      <input class="form-control required" type="text" placeholder="userName" id="username" name="username" autofocus="autofocus" maxlength="18"/>
+     </div>
+     <div class="form-group">
+      <span>真实姓名</span>
+      <i class="fa fa-lock fa-lg"></i>
+      <input class="form-control required" type="text" placeholder="actualName" id="actualname" name="actualname" maxlength="18"/>
+     </div>
+     <div class="form-group">
+      <span>密码</span>
+      <i class="fa fa-lock fa-lg"></i>
+      <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="18"/>
+     </div>
+     <div class="form-group">
+      <span>确认密码</span>
+      <i class="fa fa-lock fa-lg"></i>
+      <input class="form-control required" type="password" placeholder="passConfirm" id="passConfirm" name="passConfirm" maxlength="18"/>
+     </div>
+     <div class="form-group">
+      <span>手机号码</span>
+      <i class="fa fa-lock fa-lg"></i>
+      <input class="form-control required" type="text" placeholder="phoneNamber" id="phonenamber" name="phonenamber" maxlength="11"/>
+     </div>
+     <div class="form-group">
+      <span>年龄</span>
+      <i class="fa fa-lock fa-lg"></i>
+      <input class="form-control required" type="text" placeholder="age" id="age" name="age" maxlength="8"/>
+     </div>
+     <div class="form-group">
+      <span>性别</span>
+      <i class="fa fa-lock fa-lg"></i>
+      <select class="form-control required" id="sex" name="sex">
+       <option value="1" selected>男</option>
+       <option value="0">女</option>
+       <option value="-1">保密</option>
+      </select>
+     </div>
+     <div class="form-group col-md-offset-9">
+      <button type="button" class="btn btn-success" id="btn_register" onclick="doLogin()">去登录</button>
+      <button type="submit" id="btn-submit" class="btn btn-success pull-right">确认注册</button>
+     </div>
+    </div>
+   </div>
+  </form>
+ </div>
+</div>
+</body>
+<script>
+ function doLogin(){
+  window.location.href="/user/login";
+ }
+ $(function () {
+  $('form').bootstrapValidator({
+   message: 'This value is not valid',
+   feedbackIcons: {
+    valid: 'glyphicon glyphicon-ok',
+    invalid: 'glyphicon glyphicon-remove',
+    validating: 'glyphicon glyphicon-refresh'
+   },
+   fields: {
+    username: {
+     message: '用户名验证失败',
+     validators: {
+      notEmpty: {
+       message: '用户名不能为空'
+      },
+      stringLength: {
+       min: 5,
+       max: 18,
+       message: '用户名长度必须在5到18位之间'
+      },
+      regexp: {
+       regexp: /^[a-zA-Z0-9_]+$/,
+       message: '用户名只能包含大写、小写、数字和下划线'
+      }
+     }
+    },
+    actualname: {
+     message: '真实姓名验证失败',
+     validators: {
+      notEmpty: {
+       message: '真实姓名不能为空'
+      },
+      stringLength: {
+       min: 2,
+       max: 20,
+       message: '真实姓名长度必须在6到18位之间'
+      },
+      regexp: {
+       regexp: /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/,
+       message: '真实姓名格式不正确'
+      }
+     }
+    },
+    password: {
+     validators: {
+      notEmpty: {
+       message: '密码不能为空'
+      },
+      stringLength: {
+       min: 6,
+       max: 18,
+       message: '密码长度至少6位'
+      },
+      regexp: {
+       regexp: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$/,
+       message: '必须含有大写字母，小写字母和数字'
+      }
+     }
+    },
+    passConfirm: {
+     message: '密码确认验证失败',
+     validators: {
+      identical: {
+       field: 'password',
+       message: '两次密码不相同'
+      }
+     }
+    },
+    phonenamber: {
+     validators: {
+      notEmpty: {
+       message: '手机号码不能为空'
+      },
+      stringLength: {
+       min: 11,
+       max: 11,
+       message: '手机号码长度至少11位'
+      },
+      regexp: {
+       regexp: /^1[3456789]\d{9}$/,
+       message: '手机号码格式不正确'
+      }
+     }
+    },
+    age: {
+     validators: {
+      regexp: {
+       regexp: /^((1[0-5])|[1-9])?\d$/,
+       message: '年龄格式不正确'
+      }
+     }
+    }
+   }
+  });
+ });
+ $("#btn-submit").click(function () {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+  console.log("click");
+  var bv = $("#register_form").data('bootstrapValidator');
+  bv.validate();
+  console.log(bv.validate());
+  if (bv.isValid()) {//获取验证结果，如果成功，执行下面代码
+   console.log("123");
+   var formdata = $("#register_form").serialize(); // 获取jQuery函数获取表单数据
+ console.log(formdata);
+   // ajax
+   $.ajax({
+    //几个参数需要注意一下
+    type: "POST",//方法类型
+    dataType: "json",//预期服务器返回的数据类型
+    url: "/user/register" ,//url
+    data: formdata,
+    success: function (result) {
+     console.log(result);//打印服务端返回的数据(调试用)
+     if (result.resultCode == 200) {
+      alert(result.msg);
+     }else{
+      alert(result.msg+"[code:"+result.resultCode+"]");
+     }
+     ;
+    },
+    error : function() {
+     alert("异常！");
+    }
+   });
+  }
+ });
+</script>
+</html>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sean.dao.UserMapper">
+<!--    <resultMap id="BaseResultMap" type="com.sean.bean.User">-->
+<!--        <id column="uid" property="uid" jdbcType="VARCHAR"/>-->
+<!--        <result column="username" property="username" jdbcType="VARCHAR" />-->
+<!--        <result column="password" property="password" jdbcType="VARCHAR" />-->
+<!--    </resultMap>-->
+
+    <resultMap id="BaseResultMap" type="com.sean.bean.User">
+        <id column="uid" property="uid" jdbcType="VARCHAR"/>
+       <result column="username" property="username" jdbcType="VARCHAR" />
+       <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="phonenamber" property="phonenamber" jdbcType="VARCHAR" />
+        <result column="actualname" property="actualname" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <collection property="roleSet" ofType="com.sean.bean.Role">
+          <id property="rid" column="rid" />
+          <result property="rname" column="rname" />
+          <collection property="permissionSet" ofType="com.sean.bean.Permission">
+            <id property="pid" column="pid" />
+            <result property="name" column="pname"/>
+           <result property="url" column="url" />
+          </collection>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    uid, username, password, phonenamber, actualname, age, sex
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where uid = #{uid,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_user
+    where uid = #{uid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.sean.bean.User">
+    insert into sys_user (uid, username, password,
+      phonenamber, actualname, age,
+      sex)
+    values (#{uid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{phonenamber,jdbcType=VARCHAR}, #{actualname,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},
+      #{sex,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.sean.bean.User">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="uid != null" >
+                uid,
+            </if>
+            <if test="username != null" >
+                username,
+            </if>
+            <if test="password != null" >
+                password,
+            </if>
+            <if test="phonenamber != null" >
+                phonenamber,
+            </if>
+            <if test="actualname != null" >
+                actualname,
+            </if>
+            <if test="age != null" >
+                age,
+            </if>
+            <if test="sex != null" >
+                sex,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="uid != null" >
+                #{uid,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null" >
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="phonenamber != null" >
+                #{phonenamber,jdbcType=VARCHAR},
+            </if>
+            <if test="actualname != null" >
+                #{actualname,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null" >
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="sex != null" >
+                #{sex,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sean.bean.User">
+        update sys_user
+        <set >
+            <if test="username != null" >
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="phonenamber != null" >
+                phonenamber = #{phonenamber,jdbcType=VARCHAR},
+            </if>
+            <if test="actualname != null" >
+                actualname = #{actualname,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null" >
+                age = #{age,jdbcType=INTEGER},
+            </if>
+            <if test="sex != null" >
+                sex = #{sex,jdbcType=INTEGER},
+            </if>
+        </set>
+        where uid = #{uid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.sean.bean.User">
+    update sys_user
+  set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      phonenamber = #{phonenamber,jdbcType=VARCHAR},
+      actualname = #{actualname,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=INTEGER}
+    where uid = #{uid,jdbcType=VARCHAR}
+  </update>
+
+    <select id="selectByUsername" resultMap="BaseResultMap">
+      SELECT
+        u.uid uid,u.username,u.password,
+        r.rid rid,r.rname rname,
+        p.pid pid,p.name pname,p.url
+      FROM sys_user u
+        INNER JOIN sys_user_role ur on ur.uid = u.uid
+        INNER JOIN sys_role r on r.rid = ur.rid
+        INNER JOIN sys_permission_role pr on pr.rid = r.rid
+        INNER JOIN sys_permission p on pr.pid = p.pid
+      WHERE u.username = #{username}
+    </select>
+
+    <select id="getList" resultMap="BaseResultMap">
+    select * from sys_user
+  </select>
+</mapper>

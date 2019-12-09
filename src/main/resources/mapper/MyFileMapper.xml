@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sean.dao.MyFileMapper" >
+  <resultMap id="BaseResultMap" type="com.sean.bean.MyFile" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="uid" property="uid" jdbcType="VARCHAR" />
+    <result column="filetype" property="filetype" jdbcType="VARCHAR" />
+    <result column="thumbImage" jdbcType="VARCHAR" property="thumbimage" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, path, uid, filetype, thumbImage, size
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from my_file
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from my_file
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sean.bean.MyFile" >
+    insert into my_file (id, path, uid,
+      filetype, thumbImage, size)
+    values (#{id,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR},
+      #{filetype,jdbcType=VARCHAR}, #{thumbimage,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sean.bean.MyFile" >
+    insert into my_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="filetype != null">
+        filetype,
+      </if>
+      <if test="thumbimage != null">
+        thumbImage,
+      </if>
+      <if test="size != null">
+        size,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="filetype != null">
+        #{filetype,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbimage != null">
+        #{thumbimage,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sean.bean.MyFile" >
+    update my_file
+    <set>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="filetype != null">
+        filetype = #{filetype,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbimage != null">
+        thumbImage = #{thumbimage,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        size = #{size,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sean.bean.MyFile" >
+    update my_file
+    set path = #{path,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=VARCHAR},
+      filetype = #{filetype,jdbcType=VARCHAR},
+      thumbImage = #{thumbimage,jdbcType=VARCHAR},
+      size = #{size,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectMyfilelist" resultType="com.sean.bean.MyFile" parameterType="java.lang.String">
+    select id,path,thumbImage from my_file where uid = #{uid,jdbcType=VARCHAR}
+    <if test="types != null and types.size>0" >
+        and filetype IN
+        <foreach collection="types" item="item" index="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </if>
+  </select>
+  <delete id="deleteFileByPath" parameterType="java.lang.String" >
+        delete from my_file where path = #{path,jdbcType=VARCHAR}
+  </delete>
+  <select id="selectFileAll" resultType="com.sean.bean.MyFile">
+    select * from my_file
+  </select>
+  <select id="selectFidByPath" parameterType="java.lang.String" resultType="java.lang.String">
+    select id from my_file
+    where  path = #{path,jdbcType=VARCHAR}
+  </select>
+</mapper>
