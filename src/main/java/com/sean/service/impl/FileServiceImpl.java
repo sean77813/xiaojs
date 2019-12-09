@@ -1,7 +1,10 @@
 package com.sean.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sean.bean.*;
+import com.sean.bean.MyFile;
+import com.sean.bean.MyfileProperty;
+import com.sean.bean.PublicPic;
+import com.sean.bean.User;
 import com.sean.dao.MyFileMapper;
 import com.sean.dao.MyfilePropertyMapper;
 import com.sean.dao.OperationLogMapper;
@@ -328,6 +331,7 @@ public class FileServiceImpl implements FileService {
         return label;
     }
 
+
     @Override
     public MyFileInfo getFileInfo(String fileId) {
         if("".equals(fileId) || null == fileId)
@@ -351,5 +355,19 @@ public class FileServiceImpl implements FileService {
             fileInfo.setFileSize(myFile.getSize());
         }
         return fileInfo;
+    }
+	
+    @Override
+    public MyFile selectFileByFileId(String fileId) {
+        if("".equals(fileId) || null == fileId)
+            return null;
+        MyFile myFile = new MyFile();
+        try {
+            myFile = fileMapper.selectByPrimaryKey(fileId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return myFile;
     }
 }

@@ -21,8 +21,8 @@ function resolvingDate(date){
     var min = d.getMinutes()<10 ? '0'+d.getMinutes() : d.getMinutes();
     var sec = d.getSeconds()<10 ? '0'+d.getSeconds() : d.getSeconds();
 
-    var times=d.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + min + ':' + sec;
-
+    var times=d.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + min ;
+      //  + ':' + sec;
     return times
 }
 /*
@@ -98,4 +98,12 @@ function getSeconds(date){
         second = "0" + second;
     }
     return second;
+}
+
+//字符串去空格
+function removeBlank(str){
+    if (""== str || null == str)
+        return "";
+    str   =   str.replace(/^\s+|\s+$/g,"");
+    return str;
 }

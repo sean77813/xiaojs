@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -126,6 +127,21 @@ public class UserLoginController {
             return "login";
         }
     }
+
+    @PostMapping("/isExistsUserName")
+    public Map<String,Object> isExistsUserName(@RequestParam("username")String username){
+        System.out.println("=======>isExistsUserName");
+        String  uid = userService.isExistsUserName(username);
+        System.out.println("uid:"+uid);
+        boolean isExists = false;
+        Map<String,Object> map = new HashMap<>();
+        if ("".equals(uid)){
+            isExists = true;
+        }
+        map.put("result",isExists);
+        return map;
+    }
+
 
     /**
      * 短信验证..

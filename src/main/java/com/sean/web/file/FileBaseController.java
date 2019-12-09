@@ -155,22 +155,32 @@ public class FileBaseController {
                           HttpServletRequest request ,HttpServletResponse response)  {
         System.out.println(">>>deleteFile");
         System.out.println("filePath:"+filePath);
-        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> map = new HashMap<>();
         try {
+            String fileId = fileService.queryFileIdByPath(filePath);
+            if("".equals(fileId) || null == fileId ){
+                map.put("msg","删除失败！");
+                return map;
+            }
+            MyFile myFile = fileService.selectFileByFileId(fileId);
+            String thumbimage= myFile.getThumbimage();
             boolean isDeled = fileService.deleteFile(filePath);
             System.out.println("isDeled=>"+isDeled);
             if(isDeled){
-                dfsClient.delFile(fileName,filePath);
-                result.put("msg","删除成功！");
+                dfsClient.delFile(null,filePath);
+                if("".equals(thumbimage) && null == thumbimage){ //如果有缩略图，删除缩略图
+                    dfsClient.delFile(null,thumbimage);
+                }
+                map.put("msg","删除成功！");
             }else{
-                result.put("msg","删除失败！");
+                map.put("msg","删除失败！");
             }
         } catch(Exception e) {
-            result.put("msg","删除失败！");
+            map.put("msg","删除失败！");
             // 文件不存在报异常 ： com.github.tobato.fastdfs.exception.FdfsServerException: 错误码：2，错误信息：找不到节点或文件
              e.printStackTrace();
         }
-        return result;
+        return map;
     }
 
 

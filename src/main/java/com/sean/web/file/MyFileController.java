@@ -36,7 +36,7 @@ public class MyFileController {
         System.out.println("size:"+list.size());
         json.put("files",list);
         String str = json.toJSONString();
-        System.out.println(str);
+//        System.out.println(str);
         return str;
     }
 

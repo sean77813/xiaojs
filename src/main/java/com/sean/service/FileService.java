@@ -87,5 +87,13 @@ public interface FileService {
      * @return
      */
     MyFileInfo getFileInfo(String fileId);
-
+	
+	/**
+     * 查询文件根据id
+     * @param fileId
+     * @return
+     */
+    MyFile selectFileByFileId(String fileId);
+	
+	
 }

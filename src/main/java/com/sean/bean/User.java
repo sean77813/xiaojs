@@ -17,6 +17,8 @@ public class User {
 
     private Integer sex;
 
+    private String avatar;
+
     private Set<Role> roleSet;
 
     public String getUid() {
@@ -79,7 +81,27 @@ public class User {
         this.sex = sex;
     }
 
+    public String getAvatar() { return avatar; }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public void setRoleSet(Set<Role> roleSet) {
         this.roleSet = roleSet;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid='" + uid + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", phonenamber='" + phonenamber + '\'' +
+                ", actualname='" + actualname + '\'' +
+                ", age=" + age +
+                ", sex=" + sex +
+                ", avatar='" + avatar + '\'' +
+                '}';
     }
 }

@@ -11,9 +11,13 @@ public interface UserMapper{
 
     int insertSelective(User record);
 
+    String selectUserNameByUid(String uid);
+
     User selectByPrimaryKey(String uid);
 
     User selectByUsername(String username);
+
+    String selectUidByUsername(String username);
 
     int updateByPrimaryKeySelective(User record);
 

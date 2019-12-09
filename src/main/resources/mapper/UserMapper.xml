@@ -15,6 +15,7 @@
         <result column="actualname" property="actualname" jdbcType="VARCHAR" />
         <result column="age" property="age" jdbcType="INTEGER" />
         <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
         <collection property="roleSet" ofType="com.sean.bean.Role">
           <id property="rid" column="rid" />
           <result property="rname" column="rname" />
@@ -27,7 +28,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    uid, username, password, phonenamber, actualname, age, sex
+    uid, username, password, phonenamber, actualname, age, sex, avatar
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
@@ -42,10 +43,10 @@
     <insert id="insert" parameterType="com.sean.bean.User">
     insert into sys_user (uid, username, password,
       phonenamber, actualname, age,
-      sex)
+      sex, avatar)
     values (#{uid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
       #{phonenamber,jdbcType=VARCHAR}, #{actualname,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},
-      #{sex,jdbcType=INTEGER})
+      #{sex,jdbcType=INTEGER}, #{avatar,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="com.sean.bean.User">
         insert into sys_user
@@ -71,6 +72,9 @@
             <if test="sex != null" >
                 sex,
             </if>
+            <if test="avatar != null" >
+                avatar,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="uid != null" >
@@ -93,6 +97,9 @@
             </if>
             <if test="sex != null" >
                 #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null" >
+                #{avatar,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -117,6 +124,9 @@
             <if test="sex != null" >
                 sex = #{sex,jdbcType=INTEGER},
             </if>
+            <if test="avatar != null" >
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
         </set>
         where uid = #{uid,jdbcType=VARCHAR}
     </update>
@@ -127,7 +137,8 @@
       phonenamber = #{phonenamber,jdbcType=VARCHAR},
       actualname = #{actualname,jdbcType=VARCHAR},
       age = #{age,jdbcType=INTEGER},
-      sex = #{sex,jdbcType=INTEGER}
+      sex = #{sex,jdbcType=INTEGER},
+      avatar = #{avatar,jdbcType=INTEGER}
     where uid = #{uid,jdbcType=VARCHAR}
   </update>
 
@@ -147,4 +158,12 @@
     <select id="getList" resultMap="BaseResultMap">
     select * from sys_user
   </select>
+    <select id="selectUserNameByUid" resultType="java.lang.String" parameterType="java.lang.String">
+        select  username from sys_user
+       where uid =  #{uid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectUidByUsername" parameterType="java.lang.String" resultType="java.lang.String">
+         select  uid from sys_user
+       where username =  #{username,jdbcType=VARCHAR} limit 1
+    </select>
 </mapper>
