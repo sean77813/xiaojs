@@ -2,7 +2,6 @@ package com.sean.service;
 
 import com.sean.bean.MyFile;
 import com.sean.bean.MyFileInfo;
-import com.sean.bean.MyfileProperty;
 import com.sean.bean.PublicPic;
 
 import java.util.List;

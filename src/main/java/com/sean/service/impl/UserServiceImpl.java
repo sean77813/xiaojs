@@ -7,7 +7,6 @@ import com.sean.dao.UserMapper;
 import com.sean.fastdfs.FastDFSClientUtil;
 import com.sean.service.UserService;
 import com.sean.utils.SeanTools;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

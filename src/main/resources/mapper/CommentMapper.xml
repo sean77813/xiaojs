@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sean.dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.sean.bean.Comment">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="fid" jdbcType="VARCHAR" property="fid" />
+    <result column="uid" jdbcType="VARCHAR" property="uid" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+    <result column="likes" jdbcType="INTEGER" property="likes" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, fid, uid, time, msg, likes
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sean.bean.Comment">
+    insert into t_comment (id, fid, uid, 
+      time, msg, likes)
+    values (#{id,jdbcType=VARCHAR}, #{fid,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP}, #{msg,jdbcType=VARCHAR}, #{likes,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sean.bean.Comment">
+    insert into t_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="fid != null">
+        fid,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="msg != null">
+        msg,
+      </if>
+      <if test="likes != null">
+        likes,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="fid != null">
+        #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msg != null">
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="likes != null">
+        #{likes,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sean.bean.Comment">
+    update t_comment
+    <set>
+      <if test="fid != null">
+        fid = #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msg != null">
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="likes != null">
+        likes = #{likes,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sean.bean.Comment">
+    update t_comment
+    set fid = #{fid,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      msg = #{msg,jdbcType=VARCHAR},
+      likes = #{likes,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectCommentsByFid" parameterType="java.lang.String" resultType="com.sean.bean.Comment">
+    select * from t_comment
+    where fid = #{fid,jdbcType=VARCHAR}
+    order by time
+  </select>
+</mapper>

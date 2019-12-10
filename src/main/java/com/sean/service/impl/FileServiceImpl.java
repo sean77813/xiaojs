@@ -2,7 +2,9 @@ package com.sean.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.sean.bean.MyFile;
+import com.sean.bean.MyFileInfo;
 import com.sean.bean.MyfileProperty;
+import com.sean.bean.OperationLog;
 import com.sean.bean.PublicPic;
 import com.sean.bean.User;
 import com.sean.dao.MyFileMapper;
@@ -11,7 +13,6 @@ import com.sean.dao.OperationLogMapper;
 import com.sean.dao.PublicPicMapper;
 import com.sean.service.FileService;
 import com.sean.service.OperationLogService;
-import com.sean.spring.prop.SeanJson;
 import com.sean.utils.Constants;
 import com.sean.utils.SeanTools;
 import org.apache.shiro.SecurityUtils;
