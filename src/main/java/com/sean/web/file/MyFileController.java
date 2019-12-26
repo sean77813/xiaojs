@@ -28,23 +28,24 @@ public class MyFileController {
     private SeanJson sJson;
 
     @PostMapping("/getMyfiles")
-    public String getMyfiles(@RequestParam(value="filetype",required=false )String filetype){
+    public String getMyfiles(@RequestParam(value="filetype",required=false )String filetype,
+                             @RequestParam(value="keywords",required=false )String keywords){
         System.out.println("filetype:"+filetype);
+        System.out.println("keywords:"+keywords);
         JSONObject json = new JSONObject();
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        List<MyFile> list =  fileService.queryMyFiles(user.getUid(),filetype);
+        List<MyFile> list =  fileService.queryMyFiles(user.getUid(),filetype,keywords);
         System.out.println("size:"+list.size());
         json.put("files",list);
         String str = json.toJSONString();
-//        System.out.println(str);
         return str;
     }
 
     @PostMapping("/getPPic")
-    public String getPPicList(){
+    public String getPPicList(@RequestParam(value="keywords",required=false )String keywords){
+        System.out.println("keywords:"+keywords);
         JSONObject json = new JSONObject();
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        List<MyFile> list =  fileService.queryPPics();
+        List<MyFile> list =  fileService.queryPPics(keywords);
         json.put("files",list);
         String str = json.toJSONString();
         return str;

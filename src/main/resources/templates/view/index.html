@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title>主页</title>
+    <title>SEAN文件系统</title>
     <style>
         .panel-detail{
             position:fixed;
@@ -27,9 +27,9 @@
         <div>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" class="form-control" placeholder="Search" id="keywords">
                 </div>
-                <button type="submit" class="btn btn btn-success">搜索</button>
+                <button type="button" onclick="searchFile()" class="btn btn btn-success">搜索</button>
             </form>
             <button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#myModal">
                 上传文件
@@ -172,11 +172,11 @@
     </div>
     <ul id="myTab" class="nav nav-tabs">
         <li class="active">
-            <a href="#home" data-toggle="tab">我的文件
+            <a href="#home" data-toggle="tab" id="Tab01">我的文件
             </a>
         </li>
         <li>
-            <a href="#shareSpace" data-toggle="tab">分享空间
+            <a href="#shareSpace" data-toggle="tab" id="Tab02">分享空间
             </a>
         </li>
     </ul>
@@ -470,6 +470,9 @@
     <input type="hidden"  name="filePath" id="download_filepath"/>
 </form>
     <script>
+        //全局参数
+        var myTabId = "Tab01"; //默认当前标签
+        var path = null; //选中文件路径
         $(function () {
             //初始化个人图片
             initMyImg();
@@ -492,10 +495,11 @@
         });
 
         /** 显示文件 **/
-        function initMyImg(){
+        function initMyImg(keyword){
+
             //清空图片
             $("#img_show").empty();
-            $.post("/getMyfiles",{"filetype":"img"},function(data){
+            $.post("/getMyfiles",{"filetype":"img","keywords":keyword},function(data){
                 console.log(data);
                 var files = data.files;
                 var img  = null;
@@ -522,10 +526,10 @@
             }, 'json');
         }
         /**显示分享的图片**/
-        function initPPic(){
+        function initPPic(keywords){
             //清空图片
             $("#ppic_show").empty();
-            $.post("/getPPic",{},function(data){
+            $.post("/getPPic",{"keywords":keywords},function(data){
                 console.log(data);
                 var files = data.files;
                 var img  = null;
@@ -546,7 +550,7 @@
             }, 'json');
         }
 
-        var path = null;
+
         /** 删除图片 **/
         var delfile = function(path){
             console.log(path);
@@ -577,6 +581,7 @@
             $('#showImgModal').modal('show');
         }
 
+
     /***** 文件详细页 *******/
     $(function(){
         $("#panel-detail").hide();
@@ -584,6 +589,8 @@
 
         //切换选项卡时隐藏详细面板
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            myTabId = e.target.id;
+
             $("#panel-detail").hide();
             $("#share-detail").hide();
         });
@@ -1052,6 +1059,32 @@
         function editPwd(){
             alert("开发中...");
         }
+
+
+        /**********搜索*********/
+        $("#keywords").keydown(function(e) {
+            if (e.keyCode == 13) {
+                searchFile();
+            }
+        });
+        var isclick= true;
+        function searchFile() {
+            if(isclick) {
+                isclick = false;
+                var keywords = $("#keywords").val();
+                // $("#keywords").val("");
+                if(myTabId=="Tab01"){
+                    initMyImg(keywords);
+                }else{
+                    initPPic(keywords);
+                }
+                //防止高频点击按钮
+                setTimeout(function(){
+                    isclick = true;
+                }, 1500);
+            }
+        }
+
     </script>
 </body>
 </html>

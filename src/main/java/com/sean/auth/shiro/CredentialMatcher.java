@@ -14,6 +14,7 @@ import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 public class CredentialMatcher extends SimpleCredentialsMatcher {
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
+        System.out.println("--------------------doCredentialsMatch----------------------------");
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         String password = new String(usernamePasswordToken.getPassword());
         String dbPassword = (String) info.getCredentials();

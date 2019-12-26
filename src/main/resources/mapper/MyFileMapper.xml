@@ -101,6 +101,7 @@
       size = #{size,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
   <select id="selectMyfilelist" resultType="com.sean.bean.MyFile" parameterType="java.lang.String">
     select id,path,thumbImage from my_file where uid = #{uid,jdbcType=VARCHAR}
     <if test="types != null and types.size>0" >
@@ -110,6 +111,23 @@
         </foreach>
     </if>
   </select>
+
+  <select id="fuzzySearchMyfilelist" resultType="com.sean.bean.MyFile" parameterType="java.lang.String">
+    select file.id,file.path,file.thumbImage from my_file file,my_fileproperty pop
+    where file.id = pop.fid
+    and file.uid = #{uid,jdbcType=VARCHAR}
+    <if test="types != null and types.size>0" >
+        and file.filetype IN
+        <foreach collection="types" item="item" index="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </if>
+    <if test="keywords != null" >
+        and pop.label like CONCAT('%',#{keywords,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
+
   <delete id="deleteFileByPath" parameterType="java.lang.String" >
         delete from my_file where path = #{path,jdbcType=VARCHAR}
   </delete>

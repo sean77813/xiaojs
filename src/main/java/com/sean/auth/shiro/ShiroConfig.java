@@ -55,6 +55,8 @@ public class ShiroConfig {
 
     @Bean("securityManager")
     public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {
+        System.out.println("--------------------securityManager----------------------------");
+        System.out.println("");
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
         manager.setRealm(authRealm);
         return manager;
@@ -62,6 +64,7 @@ public class ShiroConfig {
 
     @Bean("authRealm")
     public AuthRealm authRealm(@Qualifier("credentialMatcher") CredentialMatcher matcher) {
+        System.out.println("--------------------authRealm----------------------------");
         AuthRealm authRealm = new AuthRealm();
         authRealm.setCacheManager(new MemoryConstrainedCacheManager());
         authRealm.setCredentialsMatcher(matcher);
@@ -70,11 +73,13 @@ public class ShiroConfig {
 
     @Bean("credentialMatcher")
     public CredentialMatcher credentialMatcher() {
+        System.out.println("--------------------credentialMatcher----------------------------");
         return new CredentialMatcher();
     }
 
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("securityManager") SecurityManager securityManager) {
+        System.out.println("--------------------authorizationAttributeSourceAdvisor----------------------------");
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
         advisor.setSecurityManager(securityManager);
         return advisor;
@@ -82,6 +87,7 @@ public class ShiroConfig {
 
     @Bean
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        System.out.println("--------------------defaultAdvisorAutoProxyCreator----------------------------");
         DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
         creator.setProxyTargetClass(true);
         return creator;

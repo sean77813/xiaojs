@@ -53,11 +53,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<MyFile> queryMyFiles(String uid, String filetype) {
+    public List<MyFile> queryMyFiles(String uid, String filetype, String keywords) {
         List<MyFile> files = new ArrayList<>();
         ArrayList<String> list = new ArrayList<>();
         int i = 0;
-        if (filetype != null) {
+        if (filetype != null && filetype.length()>0 ) {
             if ("img".equalsIgnoreCase(filetype)) {
                 Constants.imgFile[] s = Constants.imgFile.values();
                 for (Constants.imgFile c : s) {
@@ -73,7 +73,11 @@ public class FileServiceImpl implements FileService {
             }
         }
         try {
-            files = fileMapper.selectMyfilelist(uid, list);
+            if( null == keywords || keywords.length()<=0 ){
+                files = fileMapper.selectMyfilelist(uid, list);
+            }else{
+                files = fileMapper. fuzzySearchMyfilelist(uid, list,keywords.trim());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,10 +98,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<MyFile> queryPPics() {
+    public List<MyFile> queryPPics(String keywords) {
         List<MyFile> ppicList = new ArrayList<>();
         try {
-            List<String> fidList =  publicMapper.selectFidAll();
+            List<String> fidList = new ArrayList<>();
+            if( null == keywords || keywords.length()<=0 ){
+                fidList = publicMapper.selectFidAll();
+            }else{
+                fidList = publicMapper.fuzzySearchFid(keywords);
+            }
             for(int i = 0; i< fidList.size(); i++){
                 if("".equals(fidList.get(i)))
                     continue;
