@@ -25,12 +25,12 @@
             <a class="navbar-brand" href="#">SEAN文件系统</a>
         </div>
         <div>
-            <form class="navbar-form navbar-left" role="search">
+            <div class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search" id="keywords">
                 </div>
                 <button type="button" onclick="searchFile()" class="btn btn btn-success">搜索</button>
-            </form>
+            </div>
             <button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#myModal">
                 上传文件
             </button>
@@ -495,34 +495,41 @@
         });
 
         /** 显示文件 **/
-        function initMyImg(keyword){
+        function initMyImg(keywords){
 
             //清空图片
             $("#img_show").empty();
-            $.post("/getMyfiles",{"filetype":"img","keywords":keyword},function(data){
+            $.post("/getMyfiles",{"filetype":"img","keywords":keywords},function(data){
                 console.log(data);
                 var files = data.files;
-                var img  = null;
-                var l = files.length;
-                for(var i=0;i<l;i++){
-                    var img_path = null!=files[i].thumbimage ? files[i].thumbimage:files[i].path;
-                    var $div = $("<div class='col-sm-6 col-md-2' style='width: 20%;height: 270px;'></div>");
-                    var $a = $("<a href='#' onclick='showGigImg(\""+files[i].path+"\")' class='thumbnail' ></a>");
-                    var $btn_dowload = $("<a href='#' class='btn btn-link' role='button' id='' onclick='downloadfile(\""+files[i].path+"\")'>下载</a>");
-                    var $btn_del = $("<a href='#' class='btn btn-link' role='button' data-toggle='modal' id='del_btn_1'>删除</a>");
-                    var $input = $("<input type='hidden' name='filepath' value='"+files[i].path+"'/>");
-                    var $btn_share = $("<a href='' class='btn btn-link' role='button' data-toggle='modal' id='del_share' onclick='openShareModal(\""+files[i].id+"\")'>分享</a>");
-                    var $btn_detail = $("<a href='' class='btn btn-link' role='button' data-toggle='modal' onclick='openDetail(\""+files[i].id+"\",\"mypic\")'>更多</a>");
-                    var $img = $("<img src='"+img_path+"' alt='' />");
-                    $a.append($img);
-                    $div.append($a);
-                    $div.append($btn_dowload);
-                    $div.append($btn_del);
-                    $div.append($input);
-                    $div.append($btn_share);
-                    $div.append($btn_detail);
-                    $("#img_show").append($div);
+                if( files.length<=0 && keywords!=null ){
+                    var key = "<span style='color: #cc0000;'>"+keywords+"</span>";
+                    var msg = $("<p>&nbsp;&nbsp;&nbsp;&nbsp;很抱歉，没有找到与“"+key+"”相关的图片。</p>");
+                    $("#img_show").append(msg);
+                }else{
+                    var img  = null;
+                    var l = files.length;
+                    for(var i=0;i<l;i++){
+                        var img_path = null!=files[i].thumbimage ? files[i].thumbimage:files[i].path;
+                        var $div = $("<div class='col-sm-6 col-md-2' style='width: 20%;height: 270px;'></div>");
+                        var $a = $("<a href='#' onclick='showGigImg(\""+files[i].path+"\")' class='thumbnail' ></a>");
+                        var $btn_dowload = $("<a href='#' class='btn btn-link' role='button' id='' onclick='downloadfile(\""+files[i].path+"\")'>下载</a>");
+                        var $btn_del = $("<a href='#' class='btn btn-link' role='button' data-toggle='modal' id='del_btn_1'>删除</a>");
+                        var $input = $("<input type='hidden' name='filepath' value='"+files[i].path+"'/>");
+                        var $btn_share = $("<a href='' class='btn btn-link' role='button' data-toggle='modal' id='del_share' onclick='openShareModal(\""+files[i].id+"\")'>分享</a>");
+                        var $btn_detail = $("<a href='' class='btn btn-link' role='button' data-toggle='modal' onclick='openDetail(\""+files[i].id+"\",\"mypic\")'>更多</a>");
+                        var $img = $("<img src='"+img_path+"' alt='' />");
+                        $a.append($img);
+                        $div.append($a);
+                        $div.append($btn_dowload);
+                        $div.append($btn_del);
+                        $div.append($input);
+                        $div.append($btn_share);
+                        $div.append($btn_detail);
+                        $("#img_show").append($div);
+                    }
                 }
+
             }, 'json');
         }
         /**显示分享的图片**/
@@ -532,21 +539,28 @@
             $.post("/getPPic",{"keywords":keywords},function(data){
                 console.log(data);
                 var files = data.files;
-                var img  = null;
-                var l = files.length;
-                for(var i=0;i<l;i++){
-                    var img_path = null!=files[i].thumbimage ? files[i].thumbimage:files[i].path;
-                    var $div = $("<div class='col-sm-6 col-md-2' style='width: 20%;height: 270px;'></div>");
-                    var $a = $("<a href='#' onclick='showGigImg(\""+files[i].path+"\")' class='thumbnail'></a>");
-                    var $btn_dowload = $("<a href='#' class='btn btn-link' role='button' id='' onclick='downloadfile(\""+files[i].path+"\")'>下载</a>");
-                    var $btn_detail = $("<a href='#' class='btn btn-link' role='button' data-toggle='modal' onclick='openDetail(\""+files[i].id+"\",\"share\")'>更多</a>");
-                    var $img = $("<img src='"+img_path+"' alt='' />");
-                    $a.append($img);
-                    $div.append($a);
-                    $div.append($btn_dowload);
-                    $div.append($btn_detail);
-                    $("#ppic_show").append($div);
+                if( files.length<=0 && keywords!=null ){
+                    var key = "<span style='color: #cc0000;'>"+keywords+"</span>";
+                    var msg = $("<p>&nbsp;&nbsp;&nbsp;&nbsp;很抱歉，没有找到与“"+key+"”相关的图片。</p>");
+                    $("#ppic_show").append(msg);
+                } else{
+                        var img  = null;
+                        var l = files.length;
+                        for(var i=0;i<l;i++){
+                            var img_path = null!=files[i].thumbimage ? files[i].thumbimage:files[i].path;
+                            var $div = $("<div class='col-sm-6 col-md-2' style='width: 20%;height: 270px;'></div>");
+                            var $a = $("<a href='#' onclick='showGigImg(\""+files[i].path+"\")' class='thumbnail'></a>");
+                            var $btn_dowload = $("<a href='#' class='btn btn-link' role='button' id='' onclick='downloadfile(\""+files[i].path+"\")'>下载</a>");
+                            var $btn_detail = $("<a href='#' class='btn btn-link' role='button' data-toggle='modal' onclick='openDetail(\""+files[i].id+"\",\"share\")'>更多</a>");
+                            var $img = $("<img src='"+img_path+"' alt='' />");
+                            $a.append($img);
+                            $div.append($a);
+                            $div.append($btn_dowload);
+                            $div.append($btn_detail);
+                            $("#ppic_show").append($div);
+                        }
                 }
+
             }, 'json');
         }
 
@@ -1075,7 +1089,7 @@
                 // $("#keywords").val("");
                 if(myTabId=="Tab01"){
                     initMyImg(keywords);
-                }else{
+                }else if(myTabId=="Tab02"){
                     initPPic(keywords);
                 }
                 //防止高频点击按钮
