@@ -352,7 +352,6 @@ public class FileServiceImpl implements FileService {
         MyFileInfo fileInfo = new MyFileInfo();
         fileInfo.setFid(fileId);
         //文件名称
-        System.out.println("fileName:"+myFile.getFilename());
         if (null != myFile.getFilename() && !"".equals(myFile.getFilename())){
             fileInfo.setFileName(myFile.getFilename());
         }
