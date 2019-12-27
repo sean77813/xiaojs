@@ -76,10 +76,14 @@
             <button type="button" class="btn btn-primary pull-right"  data-toggle="modal" data-target="#addLabelModal">添加标签</button>
         </div>
         <div style="height:10px;visibility:hidden;"></div>
-        <div>
-            <table id="fileinfo_private">
-            </table>
+        <div id="fileinfo_private">
+            <p class="text-left" style="padding-left: 20px;">
+                图片名：<span id="mytd_fileName" class="text-primary"></span><br>
+                文件大小：<span id="mytd_fileSize" class="text-primary"></span><br>
+                上传时间：<span id="mytd_uploadtime" class="text-primary"></span><br>
+            </p>
         </div>
+
         <!--属性-->
         <!--<div>-->
             <!--<table id="propsList">-->
@@ -107,8 +111,17 @@
         <div style="height:10px;visibility:hidden;"></div>
 
         <div>
-            <p class="text-left" style="padding-left: 20px;">作者：<span id="td_author" class="text-primary"></span>
-                &nbsp;&nbsp;|&nbsp;&nbsp; 分享时间：<span id="td_releasetime"></span></p>
+            <p class="text-left" style="padding-left: 20px;">
+                作者：<span id="td_author" class="text-primary"></span>
+                &nbsp;&nbsp;|&nbsp;&nbsp; 分享时间：<span id="td_releasetime"></span>
+            </p>
+        </div>
+        <div>
+            <p class="text-left" style="padding-left: 20px;">
+                图片名：<span id="fxtd_fileName" class="text-primary"></span><br>
+                文件大小：<span id="fxtd_fileSize" class="text-primary"></span><br>
+                上传时间：<span id="fxtd_uploadtime" class="text-primary"></span><br>
+            </p>
         </div>
         <div style="height:15px;visibility:hidden;"></div>
 
@@ -658,10 +671,26 @@
                 initFileLogs(fid,2,"false","private-logs_div"); //下载日志
                 $("#panel-detail").show();
                 //加载 标签fid
+                $.ajax({
+                    url:"/getFileInfo",//后台的接口地址
+                    type:"post",//post请求方式
+                    async: false,
+                    data: {"fileid":fid},//提交的数
+                    success:function (data) {
+                        var fileInfo = data.fileInfo;
+                        console.log(fileInfo);
+                        for(var i in fileInfo){
+                            $("#mytd_"+i).html(fileInfo[i]);
+                        }
+                         $("#mytd_uploadtime").html(resolvingDate(fileInfo.uploadTime));
+                    },error:function (e) {
+                        console.log(e.toString());
+                    }
+                })
             }else if("share"==type){
                 initfileLabel(fid,type);
                 initFileLogs(fid,2,"false","public-logs_div"); //下载日志
-                getComment(fid);
+                getComment(fid); //加载评论
                 $("#share-detail").show();
                 $.ajax({
                     url:"/getPPicPropByFid",//后台的接口地址
@@ -675,6 +704,22 @@
                             $("#td_"+i).html(ppic[i]);
                         }
                         $("#td_releasetime").html(resolvingDate(ppic.releasetime));
+                    },error:function (e) {
+                        console.log(e.toString());
+                    }
+                });
+                $.ajax({
+                    url:"/getFileInfo",//后台的接口地址
+                    type:"post",//post请求方式
+                    async: false,
+                    data: {"fileid":fid},//提交的数
+                    success:function (data) {
+                        var fileInfo = data.fileInfo;
+                        console.log(fileInfo);
+                        for(var i in fileInfo){
+                            $("#fxtd_"+i).html(fileInfo[i]);
+                        }
+                        $("#fxtd_uploadtime").html(resolvingDate(fileInfo.uploadTime));
                     },error:function (e) {
                         console.log(e.toString());
                     }

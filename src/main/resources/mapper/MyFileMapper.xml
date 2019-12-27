@@ -7,10 +7,11 @@
     <result column="uid" property="uid" jdbcType="VARCHAR" />
     <result column="filetype" property="filetype" jdbcType="VARCHAR" />
     <result column="thumbImage" jdbcType="VARCHAR" property="thumbimage" />
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
     <result column="size" jdbcType="VARCHAR" property="size" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, path, uid, filetype, thumbImage, size
+    id, path, uid, filetype, thumbImage, filename, size
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -24,9 +25,9 @@
   </delete>
   <insert id="insert" parameterType="com.sean.bean.MyFile" >
     insert into my_file (id, path, uid,
-      filetype, thumbImage, size)
+      filetype, thumbImage,filename, size)
     values (#{id,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR},
-      #{filetype,jdbcType=VARCHAR}, #{thumbimage,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR})
+      #{filetype,jdbcType=VARCHAR}, #{thumbimage,jdbcType=VARCHAR},#{filename,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sean.bean.MyFile" >
     insert into my_file
@@ -45,6 +46,9 @@
       </if>
       <if test="thumbimage != null">
         thumbImage,
+      </if>
+      <if test="filename != null">
+        filename,
       </if>
       <if test="size != null">
         size,
@@ -66,6 +70,9 @@
       <if test="thumbimage != null">
         #{thumbimage,jdbcType=VARCHAR},
       </if>
+      <if test="filename != null">
+        #{filename,jdbcType=VARCHAR},
+      </if>
       <if test="size != null">
         #{size,jdbcType=VARCHAR},
       </if>
@@ -86,6 +93,9 @@
       <if test="thumbimage != null">
         thumbImage = #{thumbimage,jdbcType=VARCHAR},
       </if>
+      <if test="filename != null">
+          filename = #{filename,jdbcType=VARCHAR},
+      </if>
       <if test="size != null">
         size = #{size,jdbcType=VARCHAR},
       </if>
@@ -98,6 +108,7 @@
       uid = #{uid,jdbcType=VARCHAR},
       filetype = #{filetype,jdbcType=VARCHAR},
       thumbImage = #{thumbimage,jdbcType=VARCHAR},
+      filename = #{filename,jdbcType=VARCHAR},
       size = #{size,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>

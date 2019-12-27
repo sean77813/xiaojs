@@ -352,13 +352,17 @@ public class FileServiceImpl implements FileService {
         MyFileInfo fileInfo = new MyFileInfo();
         fileInfo.setFid(fileId);
         //文件名称
+        System.out.println("fileName:"+myFile.getFilename());
         if (null != myFile.getFilename() && !"".equals(myFile.getFilename())){
             fileInfo.setFileName(myFile.getFilename());
         }
         //文件上传时间
-        OperationLog filelog = logService.queryLog(fileId,1,false).get(0);
-        if(null != filelog && null != filelog.getTime()){
-            fileInfo.setUploadTime(filelog.getTime());
+        List<OperationLog> logs = logService.queryLog(fileId,1,false);
+        if(logs!=null && logs.size()>0){
+            OperationLog filelog = logs.get(0);
+            if(null != filelog && null != filelog.getTime()){
+                fileInfo.setUploadTime(filelog.getTime());
+            }
         }
         //文件大小
         if(null != myFile.getSize() && !"".equals(myFile.getSize())){
