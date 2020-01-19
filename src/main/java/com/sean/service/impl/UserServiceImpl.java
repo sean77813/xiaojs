@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService {
     private UserAndRoleMapper urMapper;
     @Autowired
     private FastDFSClientUtil dfsClient;
+
+    //在线用户
+    public static CopyOnWriteArrayList users = new CopyOnWriteArrayList();
 
     @Override
     public User findByUsername(String username) {
@@ -73,6 +77,17 @@ public class UserServiceImpl implements UserService {
         List<User> list = new ArrayList<>();
         list = userMapper.getList();
         return list;
+    }
+
+    @Override
+    public List<String> getAllUserId() {
+        List<User> list = new ArrayList<>();
+        List<String> userId = new ArrayList<>();
+        list = userMapper.getList();
+        for( User u:list ){
+            userId.add(u.getUid());
+        }
+        return userId;
     }
 
     @Override
@@ -228,7 +243,7 @@ public class UserServiceImpl implements UserService {
             user.setAvatar(null);
 
             if(edit_actualname || edit_phonenamber || edit_age ||edit_sex)
-            flag = userMapper.updateByPrimaryKeySelective(user);
+                flag = userMapper.updateByPrimaryKeySelective(user);
             if (flag>0){
                 return true;
             }
@@ -237,5 +252,18 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         return false;
+    }
+
+    @Override
+    public List<String> onlineUsers() {
+        return users;
+    }
+
+    public void addUser(String userId){
+        users.add(userId);
+    }
+
+    public void removeUser(String userId){
+        users.remove(userId);
     }
 }

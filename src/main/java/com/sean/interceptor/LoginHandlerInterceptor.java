@@ -1,7 +1,6 @@
 package com.sean.interceptor;
 
 import com.sean.auth.CodeMsg;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;

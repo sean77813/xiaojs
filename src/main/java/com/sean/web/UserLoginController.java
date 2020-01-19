@@ -1,10 +1,9 @@
 package com.sean.web;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.sean.auth.sms.SendSms;
 import com.sean.bean.User;
 import com.sean.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -12,11 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +22,7 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserLoginController {
 
+    private static final Logger logger = LogManager.getLogger(UserLoginController.class);
     @Autowired
     private UserService userService;
 
@@ -92,9 +88,11 @@ public class UserLoginController {
     public String logout() {
         System.out.println(">>>logout");
         Subject subject = SecurityUtils.getSubject();
-        System.out.println(subject);
         if (subject != null) {
+            User user = (User)subject.getPrincipal();
             System.out.println("注销用户..");
+            logger.info("[注销用户]-["+user.getUsername()+"]");
+            userService.removeUser(user.getUid());
             subject.logout();
         }
         return "login";
@@ -120,10 +118,13 @@ public class UserLoginController {
         try {
             subject.login(token);
             User user = (User) subject.getPrincipal();
+            userService.addUser(user.getUid());
             System.out.println(user.getUsername()+"登录成功...");
+            logger.info("[登录成功]-["+user.getUsername()+"]");
             return "redirect:/kwin";
         } catch (Exception e) {
             System.out.println("登录错误...");
+            logger.info("[登录错误]");
             return "login";
         }
     }

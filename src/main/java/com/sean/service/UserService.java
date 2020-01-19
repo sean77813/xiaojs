@@ -15,6 +15,8 @@ public interface UserService {
 
     List<User> getList();
 
+    List<String> getAllUserId();
+
     /**
      *  检查用户名
      * @param username
@@ -45,4 +47,14 @@ public interface UserService {
      * @return
      */
     boolean editUserInfo(User user);
+
+    /**
+     * 在线用户列表
+     * @return
+     */
+    List<String> onlineUsers();
+
+    void addUser(String userId);
+
+    void removeUser(String userId);
 }

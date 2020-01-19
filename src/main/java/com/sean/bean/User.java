@@ -1,8 +1,10 @@
 package com.sean.bean;
 
+import javax.security.auth.Subject;
+import java.security.Principal;
 import java.util.Set;
 
-public class User {
+public class User implements Principal {
     private String uid;
 
     private String username;
@@ -103,5 +105,15 @@ public class User {
                 ", sex=" + sex +
                 ", avatar='" + avatar + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getName() {
+        return username;
+    }
+
+    @Override
+    public boolean implies(Subject subject) {
+        return false;
     }
 }
