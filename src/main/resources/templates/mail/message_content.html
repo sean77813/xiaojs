@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/js/common.js"></script>
+</head>
+<body>
+<div class="container">
+    <h4 th:text="${data.title}"></h4>
+    <div class="form-group">
+        <label>发件人:</label>
+        <spap th:text="${data.fromUser}"></spap>
+    </div>
+    <div class="form-group">
+        <label>时&nbsp;&nbsp;&nbsp;间:</label>
+        <span th:text="${#dates.format(data.time, 'yyyy年MM月dd日 HH:mm:ss')}"></span>
+    </div>
+    <hr>
+    <p th:text="${data.content}"></p>
+</div>
+
+
+</body>
+</html>

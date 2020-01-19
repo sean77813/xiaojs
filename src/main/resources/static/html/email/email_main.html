@@ -1,0 +1,44 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body{
+            overflow:hidden;
+        }
+        .tab-content{
+            width: 100%;
+        }
+        .tab-pane {
+            min-height: 900px;
+        }
+    </style>
+</head>
+<body onload="initItem()">
+<div style="padding: 5px 10px 0 10px; width: 100%;">
+    <div class="row">
+        <!-- 此处是相关代码 -->
+        <ul class="nav nav-tabs" role="tablist">
+        </ul>
+        <div class="tab-content" style="width:100%;height: 100%;">
+        </div>
+        <!-- 相关代码结束 -->
+    </div>
+</div>
+</body>
+<script src="/js/common.js"></script>
+<script>
+    function initItem(){
+        var item = {'id':'33','name':'收件箱','url':'message_list.html','closable':false};
+        closableTab.addTab(item);
+        $(".tab-pane").height("100%");
+        // $(".tab-content").height("100%");
+    }
+
+    function addItem(Id, name, url){
+        var item = {'id':Id,'name':name,'url':url,'closable':true};
+        closableTab.addTab(item);
+    }
+
+</script>
+</html>
