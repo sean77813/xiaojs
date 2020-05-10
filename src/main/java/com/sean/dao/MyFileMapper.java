@@ -24,5 +24,14 @@ public interface MyFileMapper {
 
     List<MyFile> selectMyfilelist(String uid, List<String> types);
 
+    /**
+     * 模糊搜索
+     * @param uid
+     * @param types
+     * @param keywords
+     * @return
+     */
+    List<MyFile> fuzzySearchMyfilelist(String uid, List<String> types, String keywords);
+
     List<MyFile> selectFileAll();
 }

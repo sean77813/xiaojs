@@ -1,8 +1,12 @@
 document.write('<link href="/js/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">');
 document.write('<link href="/js/bootstrap/css/bootstrapValidator.min.css" rel="stylesheet" type="text/css">');
+document.write('<link href="/js/bootstrap/css/bootstrap-table.min.css" rel="stylesheet" type="text/css">');
 document.write('<script src="/js/jquery/jquery.min.js"  type="text/javascript"></script>');
 document.write('<script src="/js/bootstrap/js/bootstrap.min.js"   type="text/javascript"></script>');
 document.write('<script src="/js/bootstrap/js/bootstrapValidator.js"   type="text/javascript"></script>');
+document.write('<script src="/js/bootstrap/js/bootstrap-table.min.js"   type="text/javascript"></script>');
+document.write('<script src="/js/bootstrap/js/bootstrap-table-zh-CN.min.js"   type="text/javascript"></script>');
+document.write('<script src="/js/bootstrap/js/bootstrap-closable-tab.js"   type="text/javascript"></script>');
 function getRootPath(){
     var strFullPath=window.document.location.href;
     var strPath=window.document.location.pathname;
@@ -22,7 +26,7 @@ function resolvingDate(date){
     var sec = d.getSeconds()<10 ? '0'+d.getSeconds() : d.getSeconds();
 
     var times=d.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + min ;
-      //  + ':' + sec;
+    //  + ':' + sec;
     return times
 }
 /*

@@ -2,6 +2,7 @@ package com.sean.web.file;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -121,10 +122,15 @@ public class FileBaseController {
 
         if (input!=null)
         logService.recordLog(fid,2); //添加[下载日志]
-
+        MyFile myFile = fileService.selectFileByFileId(fid);
+        String fileName = myFile.getFilename();
         //根据文件名获取 MIME 类型
-        String fileName = paths[paths.length-1] ;
+        if( null==fileName || fileName.length()<=0 ){
+            fileName = paths[paths.length-1] ;
+        }
         System.out.println("fileName :" + fileName); // wKgIZVzZEF2ATP08ABC9j8AnNSs744.jpg
+        // 解决获得中文参数的乱码
+        fileName = new String(fileName.getBytes("utf-8"), "iso-8859-1");
         String contentType = request.getServletContext().getMimeType(fileName);
         String contentDisposition = "attachment;filename=" + fileName;
         // 设置头

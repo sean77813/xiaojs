@@ -2,10 +2,7 @@ package com.sean.fastdfs;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 
-import com.sean.service.OperationLogService;
 import org.apache.commons.io.FilenameUtils;
 import org.csource.fastdfs.ClientGlobal;
 import org.csource.fastdfs.ProtoCommon;

@@ -87,6 +87,14 @@
     select fid from t_publicpic
     order by releasetime
   </select>
+  <select id="fuzzySearchFid" resultType="java.lang.String" parameterType="java.lang.String">
+    select ppic.fid from t_publicpic ppic, my_fileproperty pop
+    where ppic.fid = pop.fid
+    <if test="keywords != null" >
+      and pop.label like CONCAT('%',#{keywords,jdbcType=VARCHAR},'%')
+    </if>
+    order by releasetime
+  </select>
   <select id="selectPpicByFid" resultType="com.sean.bean.PublicPic"  parameterType="java.lang.String">
     select * from t_publicpic
     where fid = #{fid,jdbcType=VARCHAR}

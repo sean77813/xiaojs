@@ -19,9 +19,10 @@ public interface FileService {
      * 查询个人类型文件
      * @param uid
      * @param filetype
+     * @param keywords
      * @return
      */
-    List<MyFile> queryMyFiles(String uid, String filetype);
+    List<MyFile> queryMyFiles(String uid, String filetype,String keywords);
 
     /**
      * 查询文件ID根据路径
@@ -33,8 +34,9 @@ public interface FileService {
     /**
      * 查询所有分享文件
      * @return
+     * @param keywords
      */
-    List<MyFile> queryPPics();
+    List<MyFile> queryPPics(String keywords);
 
     /**
      * 删除文件

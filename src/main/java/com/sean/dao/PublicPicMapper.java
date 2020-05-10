@@ -23,5 +23,7 @@ public interface PublicPicMapper {
 
     List<String> selectFidAll();
 
+    List<String> fuzzySearchFid(String keywords);
+
     PublicPic selectPpicByFid(String fid);
 }

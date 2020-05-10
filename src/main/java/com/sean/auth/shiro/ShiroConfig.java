@@ -55,6 +55,7 @@ public class ShiroConfig {
 
     @Bean("securityManager")
     public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {
+        System.out.println("");
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
         manager.setRealm(authRealm);
         return manager;

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+<!--    <link href="/js/bootstrap/css/bootstrap-table.min.css" rel="stylesheet" type="text/css">-->
+<style>
+    body{
+        overflow:hidden;
+    }
+    #tb_SaleOrder tbody > tr:hover {
+        background-color: #E6E6FA;
+    }
+    #tb_SaleOrder > thead th {
+        padding: 0;
+        margin: 0;
+        background-color: #d9edf7;
+    }
+    .row-haveread{
+        font-weight: 700;
+        border:0px;
+    }
+    .row-unread{
+        font-weight: 300;
+        border:0px;
+    }
+    .table>tbody>tr>td{
+        border:0px !important;
+    }
+</style>
+</head>
+<body>
+<!--初始化bootstrap-table-->
+<div class="panel-body" style="padding-bottom:0px;width:100%;margin:0 5px;">
+    <table id="tb_SaleOrder" class="table table-striped"></table>
+</div>
+<script src="/js/common.js"></script>
+<script>
+    function mark(value, row, index){
+        var html;
+        if(row.status==0){
+            html = "<div><a href='javascript:void(0);' class='star'><span class='glyphicon glyphicon-star' id='star"+row.pkId+"'></a></div>";
+        }else{
+            html = "<div><a href='javascript:void(0);'  class='star'><span class='glyphicon glyphicon-star-empty' id='star"+row.pkId+"'></span></a></div>";
+        }
+        return html;
+    }
+    window.markEvents = {
+        'click .star': function (e, value, row, index) {
+            var $star = $("#star"+row.pkId);
+            if($star.hasClass("glyphicon-star")){
+                $star.removeClass("glyphicon-star");
+                $star.addClass("glyphicon-star-empty");
+                addStar(row.pkId, "admin",0);
+            }else if($star.hasClass("glyphicon-star-empty")){
+                $star.removeClass("glyphicon-star-empty");
+                $star.addClass("glyphicon-star");
+                addStar(row.pkId, "admin",1);
+            }
+        }
+    };
+
+    $(function(){
+        InitTable("/mail/list");
+    })
+    var InitTable = function (url) {
+        //先销毁表格
+        $('#tb_SaleOrder').bootstrapTable("destroy");
+        //加载表格
+        $('#tb_SaleOrder').bootstrapTable({
+            rowStyle: function (row, index) {//row 表示行数据，object,index为行索引，从0开始
+                var style = "";
+                if (row.SignInTime == '' || row.SignOutTime=='') {
+                    style = { css: { 'color': 'red' } };
+                }
+                return  style;
+            },
+            //searchAlign: 'left',
+            search: false,   //显示隐藏搜索框
+            showHeader: false,     //是否显示列头
+            //classes: 'table-no-bordered',
+            showLoading: true,
+            undefinedText: '',
+            showFullscreen: true,
+            // toolbarAlign: 'left',
+            paginationHAlign: 'right',
+            silent: true,
+            url: url,
+            method: 'post',                      //请求方式（*）
+            // toolbar: '#toolbar',                //工具按钮用哪个容器
+            striped: true,                      //是否显示行间隔色
+            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                   //是否显示分页（*）
+            sortable: true,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            //queryParams: InitTable.queryParams,  //传递参数（*）
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                       //初始化加载第一页，默认第一页
+            pageSize: 20 ,                       //每页的记录行数（*）
+            pageList: [2, 5, 10, 15],        //可供选择的每页的行数（*）
+            search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+            strictSearch: true,
+            showColumns: true,                  //是否显示所有的列
+            showRefresh: false,                  //是否显示刷新按钮
+            minimumCountColumns: 2,             //最少允许的列数
+            clickToSelect: true,                //是否启用点击选中行
+            //height: 680,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+            showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
+            cardView: false,                    //是否显示详细视图
+            detailView: false,                   //是否显示父子表
+            showExport: false,
+            //exportDataType: 'all',
+            exportDataType: "selected",        //导出checkbox选中的行数
+            paginationLoop: false,             //是否无限循环
+            columns: [{
+                checkbox: true
+            }, {
+                field: 'fromUser',
+                title: '发件人',
+                width: '15',
+            }, {
+                field: 'parameters',
+                title: '标星',
+                width: '10',
+                events: markEvents,
+                formatter: mark
+            }, {
+                field: 'title',
+                title: '标题',
+                width: '250'
+            }, {
+                field: 'time',
+                title: '时间',
+                width: '30',
+                formatter: function (value, row, index) {
+                    return datetimeFormat(value);
+                }
+            }],
+            onClickRow:function (row, $element, field) {
+                console.log(field);
+                if(field!="parameters"){
+                    parent.addItem( row.pkId, row.title,'/mail/getContent?pkId='+row.pkId );
+                }else{
+                    // addStar(row.pkId, "admin",);
+                }
+            },
+            rowStyle:function(row,index) {
+                var classes = [
+                    'row-haveread',
+                    'row-unread'
+                ]
+                if( row.readStatus==0 ){
+                    return {
+                        classes: classes[0]
+                    }
+                }else if( row.readStatus==1 ){
+                    return {
+                        classes: classes[1]
+                    }
+                }
+            },
+            onLoadSuccess: function (data) {
+                mergeColspan(data, ["formUser", "parameters", "title","time"], $('#tb_SaleOrder'));//列合并
+            },
+        });
+        return InitTable;
+    };
+
+    //刷新bootstrap-table
+    function refleshBootStrapTable() {
+        $("#tb_SaleOrder").bootstrapTable('refresh');
+    }
+
+    /**
+     * 合并列
+     * @param data  原始数据（在服务端完成排序）
+     * @param fieldName 合并属性数组
+     * @param target    目标表格对象
+     */
+    function mergeColspan(data, fieldNameArr, target) {
+        if (data.length == 0) {
+            alert("不能传入空数据");
+            return;
+        }
+        if (fieldNameArr.length == 0) {
+            alert("请传入属性值");
+            return;
+        }
+        var num = -1;
+        var index = 0;
+        for (var i = 0; i < data.length; i++) {
+            num++;
+            for (var v in fieldNameArr) {
+                index = 1;
+                if (data[i][fieldNameArr[v]] != data[i][fieldNameArr[0]]) {
+                    index = 0;
+                    break;
+                }
+            }
+            if (index == 0) {
+                continue;
+            }
+            $(target).bootstrapTable('mergeCells', { index: num, field: fieldNameArr[0], colspan: fieldNameArr.length, rowspan: 1 });
+        }
+    }
+
+    function addStar(mId,uId,star){
+        $.ajax({
+            url:"/mail/addStar",//后台的接口地址
+            type:"post",//post请求方式
+            async: false,
+            data: {"mId":mId,"uId":uId,"star":star},//提交的数据
+            success:function (data) {
+                if(data.result){
+                    console.log("标星成功！");
+                }else{
+                    console.log("标星失败！");
+                }
+            },error:function (e) {
+                console.log(e.toString());
+            }
+        })
+
+    }
+
+    //当月第一天所对应的日期 yyyy-mm-dd
+    function GetLocalMonFrstDayDate() {
+        var now = new Date();
+        var year = now.getFullYear();//年
+        var mon = now.getMonth() + 1;//月
+        if (mon < 10) {
+            mon = '-0' + mon;
+        }
+        var frstDay = "-01"; //日
+        return year + mon + frstDay;
+    }
+    //当月最后一天所对应的日期 yyyy-mm-dd
+    function GetLocalMonLastDayDate() {
+        var now = new Date();
+        var year = now.getFullYear();//年
+        var mon = now.getMonth() + 1;//月
+        if (mon < 10) {
+            mon = '-0' + mon;
+        }
+        var LastDay = "-" + GetDayCountInMon(year + mon);
+        return year + mon + LastDay;
+    }
+    //计算当月对应的最大天数
+    function GetDayCountInMon(YearMon) {
+        var arr = YearMon.split("-");
+        var localYear = parseInt(arr[0]);
+        var localMon = parseInt(arr[1]);
+        var localDate = new Date(localYear, localMon, 0);
+        return localDate.getDate();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/js/common.js"></script>
+    <script src="/js/sockjs.min.js"></script>
+    <script src="/js/stomp.min.js"></script>
+    <style>
+
+        /*左固定列*/
+        .menu_left{
+            width: 100px;
+            height: 100%;
+            float: left;
+            /*position: absolute;
+            left: 0;*/
+        }
+        /*右自适应列*/
+        .info_right{
+            height: 100%;
+            margin-left: 115px;
+            background-color: #ffffff;
+            border: 3px solid #2a6496;
+        }
+        /*.pagination_buttom{*/
+        /*    position: fixed;*/
+        /*    bottom: 0;*/
+        /*    width: 100%;*/
+        /*    text-align: center;*/
+        /*}*/
+        .search_iframe{
+            width: 100%;
+            height: 120px;
+        }
+        .info_iframe{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div id="menu_left" class="menu_left" >
+        <ul class="nav nav-pills nav-stacked">
+            <li id="message_li" class="active"><a href="#" onclick="setInfoIframeSrc('/html/email/email_main.html','message')">信箱</a></li>
+            <li id="flag_li"><a href="#" onclick="setInfoIframeSrc('/html/flag_list.html','flag')">星标邮件</a></li>
+            <li id="havesent_li"><a href="#" onclick="setInfoIframeSrc('/html/havesent_list.html','havesent')">已发送</a></li>
+        </ul>
+    </div>
+    <div id="info_right" class="info_right">
+<!--        <iframe id="search_iframe" src="/html/sraech.html" frameborder="0" height="100%" class="search_iframe" scrolling=auto></iframe>-->
+        <iframe id="info_iframe" src="/html/email/email_main.html" frameborder="0" height="100%" class="info_iframe" scrolling=auto></iframe>
+<!--        <div class="pagination_buttom">-->
+<!--            <ul class="pagination">-->
+<!--                <li><a href="#" >&laquo;</a></li>-->
+<!--                <li class="active"><a href="#">1</a></li>-->
+<!--                <li class="disabled"><a href="#">2</a></li>-->
+<!--                <li><a href="#">3</a></li>-->
+<!--                <li><a href="#">4</a></li>-->
+<!--                <li><a href="#">5</a></li>-->
+<!--                <li><a href="#">&raquo;</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
+    </div>
+</div>
+<script type="text/javascript">
+
+    function setInfoIframeSrc(url, li){
+        $("#info_iframe").attr("src","");
+        $("#info_iframe").attr("src",url);
+        clearLiClass();
+        $("#"+li+"_li").addClass("active");
+    }
+
+    function clearLiClass(){
+        $("#message_li").removeClass("active");
+        $("#flag_li").removeClass("active");
+        $("#havesent_li").removeClass("active");
+    }
+
+    $(function(){
+        var div_height = parent.messageFrameHeight();
+        $("#info_right").height(div_height-20);
+    })
+</script>
+</body>
+</html>

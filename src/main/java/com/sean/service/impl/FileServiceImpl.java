@@ -53,11 +53,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<MyFile> queryMyFiles(String uid, String filetype) {
+    public List<MyFile> queryMyFiles(String uid, String filetype, String keywords) {
         List<MyFile> files = new ArrayList<>();
         ArrayList<String> list = new ArrayList<>();
         int i = 0;
-        if (filetype != null) {
+        if (filetype != null && filetype.length()>0 ) {
             if ("img".equalsIgnoreCase(filetype)) {
                 Constants.imgFile[] s = Constants.imgFile.values();
                 for (Constants.imgFile c : s) {
@@ -73,7 +73,11 @@ public class FileServiceImpl implements FileService {
             }
         }
         try {
-            files = fileMapper.selectMyfilelist(uid, list);
+            if( null == keywords || keywords.length()<=0 ){
+                files = fileMapper.selectMyfilelist(uid, list);
+            }else{
+                files = fileMapper. fuzzySearchMyfilelist(uid, list,keywords.trim());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,10 +98,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<MyFile> queryPPics() {
+    public List<MyFile> queryPPics(String keywords) {
         List<MyFile> ppicList = new ArrayList<>();
         try {
-            List<String> fidList =  publicMapper.selectFidAll();
+            List<String> fidList = new ArrayList<>();
+            if( null == keywords || keywords.length()<=0 ){
+                fidList = publicMapper.selectFidAll();
+            }else{
+                fidList = publicMapper.fuzzySearchFid(keywords);
+            }
             for(int i = 0; i< fidList.size(); i++){
                 if("".equals(fidList.get(i)))
                     continue;
@@ -347,9 +356,12 @@ public class FileServiceImpl implements FileService {
             fileInfo.setFileName(myFile.getFilename());
         }
         //文件上传时间
-        OperationLog filelog = logService.queryLog(fileId,1,false).get(0);
-        if(null != filelog && null != filelog.getTime()){
-            fileInfo.setUploadTime(filelog.getTime());
+        List<OperationLog> logs = logService.queryLog(fileId,1,false);
+        if(logs!=null && logs.size()>0){
+            OperationLog filelog = logs.get(0);
+            if(null != filelog && null != filelog.getTime()){
+                fileInfo.setUploadTime(filelog.getTime());
+            }
         }
         //文件大小
         if(null != myFile.getSize() && !"".equals(myFile.getSize())){
