@@ -18,11 +18,11 @@ public class SendSms {
    // public final static Logger logger = LoggerFactory.getLogger(SendSms.class);
 
 
-    private static final String REGIONID = "华东1（杭州）";
-    private static final String ACCESSKEYID = "LTAI4Ft15QeC3dcHcYdSQmWG";
-    private static final String SECRET = "RsDSTg511rDkTztCGB4n6XlsaKXndp";
-    private static final String SIGNNAME_ZC = "Sean文件系统";
-    private static final String  TEMPLATECODE = "SMS_179280132";
+    private static final String REGIONID = "";
+    private static final String ACCESSKEYID = "";
+    private static final String SECRET = "";
+    private static final String SIGNNAME_ZC = "";
+    private static final String  TEMPLATECODE = "";
 
     public static void main(String[] args) {
 //        boolean flag = VerificationCode("17521668894");
@@ -36,7 +36,7 @@ public class SendSms {
         request.setVersion("2017-05-25");
         request.setAction("SendSms");
         request.putQueryParameter("RegionId", "cn-hangzhou");
-        request.putQueryParameter("PhoneNumbers", "17521668894");
+        request.putQueryParameter("PhoneNumbers", "");
         request.putQueryParameter("SignName", SIGNNAME_ZC);
         request.putQueryParameter("TemplateCode", TEMPLATECODE);
 //        request.putQueryParameter("");
